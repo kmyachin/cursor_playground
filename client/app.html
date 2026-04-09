@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Зёрнышко — демо-приложение: вход ребёнка и родителя, тестовые данные."
+    />
+    <title>Зёрнышко — приложение</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="app.css" />
+  </head>
+  <body class="app-body">
+    <div id="loginRoot" class="app-login">
+      <div class="app-login__box">
+        <h1>🐱 Зёрнышко</h1>
+        <p class="app-login__lead">
+          Демо-кабинет: войдите как ребёнок или родитель. Пин-код для вида —
+          подойдёт любой.
+        </p>
+        <div class="role-cards">
+          <button type="button" class="role-card" id="roleChild" data-role="child">
+            <span class="role-card__icon" aria-hidden="true">🐱</span>
+            <span class="role-card__text">
+              <strong>Ребёнок</strong>
+              <span>Маша · карта, копилка и кот БанкоКот</span>
+            </span>
+          </button>
+          <button type="button" class="role-card" id="roleParent" data-role="parent">
+            <span class="role-card__icon" aria-hidden="true">👩</span>
+            <span class="role-card__text">
+              <strong>Родитель</strong>
+              <span>Ольга Петровна · лимиты и операции Маши</span>
+            </span>
+          </button>
+        </div>
+        <div class="login-field">
+          <label for="pinInput">Пин-код (демо)</label>
+          <input
+            id="pinInput"
+            type="password"
+            inputmode="numeric"
+            maxlength="6"
+            placeholder="Например, 1234"
+            autocomplete="off"
+          />
+          <p class="login-hint">В демо проверка не выполняется — можно оставить пустым.</p>
+        </div>
+        <p id="serverSyncStatus" class="login-hint server-sync-line" aria-live="polite"></p>
+        <p id="loginError" class="alert hidden" role="alert"></p>
+        <div class="login-actions">
+          <button type="button" class="btn btn-primary" id="loginBtn">Войти</button>
+        </div>
+        <p class="back-landing">
+          <a href="index.html">← На лендинг</a>
+        </p>
+      </div>
+    </div>
+
+    <div id="appRoot" class="hidden">
+      <!-- Ребёнок -->
+      <div id="childShell" class="app-shell hidden">
+        <div id="childBlockedBanner" class="card-blocked-banner hidden">
+          Карта временно заблокирована. Напиши маме, если нужна помощь.
+        </div>
+        <header class="app-topbar">
+          <div class="app-topbar__user">
+            <span class="app-topbar__avatar" id="childAvatar">🐱</span>
+            <div class="app-topbar__meta">
+              <strong id="childTopName">Маша</strong>
+              <span id="childTopRole">Детский аккаунт</span>
+            </div>
+          </div>
+          <button type="button" class="btn btn-ghost btn-sm" id="btnLogoutChild">
+            Выйти
+          </button>
+        </header>
+
+        <main class="app-main">
+          <section class="view is-active" data-view="home">
+            <div class="app-card app-card--accent">
+              <p class="muted">Детская карта ··· 4821</p>
+              <p class="balance-big" id="homeBalance">1 250 ₽</p>
+              <div class="quick-actions quick-actions--card">
+                <button type="button" data-jump="pay">Оплатить</button>
+                <button type="button" data-jump="history">История</button>
+              </div>
+            </div>
+            <div class="app-card home-savings-widget">
+              <h3 class="goal-subtitle home-savings-widget__title">Копилка и цели</h3>
+              <div id="homeGoalPreview" class="home-preview-mount"></div>
+              <div id="homePiggyPreview" class="home-preview-mount home-preview-mount--piggy"></div>
+              <div class="home-widget-actions">
+                <button type="button" class="btn btn-outline btn-sm" data-jump="savings">
+                  Копилка
+                </button>
+                <button type="button" class="btn btn-outline btn-sm" data-jump="goal">
+                  Цель
+                </button>
+              </div>
+            </div>
+            <div class="mascot-card" role="note">
+              <span class="mascot-card__icon" aria-hidden="true">🐱</span>
+              <div class="mascot-card__body">
+                <strong>БанкоКот</strong>
+                <span>Твой наставник: финансы и школа. Попробуй симулятор с подсказками во вкладке «Квест».</span>
+                <button type="button" class="btn btn-ghost btn-sm mascot-card__cta" data-jump="sim">
+                  Открыть квесты
+                </button>
+              </div>
+            </div>
+            <h2 class="section-title">Последние операции</h2>
+            <div class="app-card">
+              <ul class="tx-list" id="homeRecent"></ul>
+            </div>
+          </section>
+
+          <section class="view" data-view="pay">
+            <div class="child-view-head">
+              <button type="button" class="btn btn-ghost btn-sm child-view-back" data-back-home>
+                ← Назад
+              </button>
+            </div>
+            <h2 class="section-title">Оплата картой</h2>
+            <p class="muted" style="margin: 0 0 1rem">
+              Выбери место и сумму — спишем с баланса (демо).
+            </p>
+            <div class="app-card">
+              <div class="pay-merchants" id="payMerchants"></div>
+              <p class="muted" id="payMerchantHint" style="margin: 0.75rem 0 0">
+                Сначала выбери магазин выше.
+              </p>
+              <div class="amount-row">
+                <label class="sr-only" for="payAmount">Сумма</label>
+                <input
+                  id="payAmount"
+                  type="number"
+                  inputmode="numeric"
+                  min="1"
+                  placeholder="Сумма в ₽"
+                />
+              </div>
+              <button type="button" class="btn btn-primary" id="paySubmit" style="margin-top: 1rem; width: 100%">
+                Оплатить
+              </button>
+              <p id="payMessage" class="alert hidden" role="status"></p>
+            </div>
+          </section>
+
+          <section class="view" data-view="history">
+            <div class="child-view-head">
+              <button type="button" class="btn btn-ghost btn-sm child-view-back" data-back-home>
+                ← Назад
+              </button>
+            </div>
+            <h2 class="section-title">История операций</h2>
+            <div class="app-card">
+              <ul class="tx-list" id="historyList"></ul>
+            </div>
+          </section>
+
+          <section class="view" data-view="savings">
+            <div class="child-view-head">
+              <button type="button" class="btn btn-ghost btn-sm child-view-back" data-back-home>
+                ← Назад
+              </button>
+            </div>
+            <h2 class="section-title">Копилки</h2>
+            <div class="app-card" style="margin-bottom: 1rem">
+              <h3 class="goal-subtitle">Новая копилка</h3>
+              <p class="muted" style="margin: 0 0 0.75rem; font-size: 0.85rem">
+                Можно завести копилку без цели и позже добавить к ней цель.
+              </p>
+              <label class="goal-label" for="piggyNewTitle">Название</label>
+              <input id="piggyNewTitle" class="goal-input" type="text" maxlength="120" placeholder="Например, на мечту" />
+              <label class="goal-label" for="piggyNewEmoji">Эмодзи (необязательно)</label>
+              <input id="piggyNewEmoji" class="goal-input" type="text" maxlength="16" placeholder="🐷" />
+              <label class="goal-label" for="piggyNewTarget">Сумма-ориентир (₽, необязательно)</label>
+              <input id="piggyNewTarget" class="goal-input" type="number" inputmode="numeric" min="100" step="50" placeholder="без лимита" />
+              <button type="button" class="btn btn-primary" id="btnPiggyCreate" style="margin-top: 0.75rem; width: 100%">
+                Создать копилку
+              </button>
+              <p id="piggyCreateMsg" class="alert hidden" role="status"></p>
+            </div>
+            <div id="piggyAttachGoalCard" class="app-card hidden" style="margin-bottom: 1rem">
+              <h3 class="goal-subtitle">Добавить цель к копилке</h3>
+              <p class="muted" id="piggyAttachPiggyLabel" style="margin: 0 0 0.75rem; font-size: 0.85rem"></p>
+              <input type="hidden" id="piggyAttachPiggyId" value="" />
+              <label class="goal-label" for="piggyAttachTitle">Название цели</label>
+              <input id="piggyAttachTitle" class="goal-input" type="text" maxlength="120" placeholder="Например, новый велосипед" />
+              <label class="goal-label" for="piggyAttachTarget">Сумма (₽)</label>
+              <input id="piggyAttachTarget" class="goal-input" type="number" inputmode="numeric" min="100" step="50" placeholder="5000" />
+              <label class="goal-label" for="piggyAttachDeadline">Дата цели</label>
+              <input id="piggyAttachDeadline" class="goal-input" type="date" />
+              <button type="button" class="btn btn-primary" id="btnPiggyAttachGoal" style="margin-top: 0.75rem; width: 100%">
+                Сохранить цель
+              </button>
+              <p id="piggyAttachMsg" class="alert hidden" role="status"></p>
+            </div>
+            <div class="app-card">
+              <div id="piggyList"></div>
+            </div>
+          </section>
+
+          <section class="view" data-view="goal">
+            <div class="child-view-head">
+              <button type="button" class="btn btn-ghost btn-sm child-view-back" data-back-home>
+                ← Назад
+              </button>
+            </div>
+            <h2 class="section-title">Цель и награды</h2>
+            <p class="muted" style="margin: 0 0 1rem">
+              Можно вести несколько целей сразу. Для каждой — своя копилка и недельный план. Добавляй шаги к цели: после того как выполнишь, мама подтвердит и при согласовании зачислит сумму на цель. Нажми «Внести» у цели, чтобы перевести со своей карты. Награды — за взнос по плану, контроль трат, идеи с маминым «ок».
+            </p>
+            <div class="app-card goal-form-card">
+              <h3 class="goal-subtitle">Новая цель</h3>
+              <label class="goal-label" for="goalFormTitle">Название</label>
+              <input id="goalFormTitle" class="goal-input" type="text" maxlength="120" placeholder="Например, новый велосипед" />
+              <label class="goal-label" for="goalFormTarget">Сумма (₽)</label>
+              <input id="goalFormTarget" class="goal-input" type="number" inputmode="numeric" min="100" step="50" placeholder="5000" />
+              <label class="goal-label" for="goalFormDeadline">Дата цели</label>
+              <input id="goalFormDeadline" class="goal-input" type="date" />
+              <button type="button" class="btn btn-primary" id="btnGoalCreate" style="margin-top: 0.75rem; width: 100%">
+                Сохранить цель
+              </button>
+              <p id="goalFormMsg" class="alert hidden" role="status"></p>
+            </div>
+            <div id="goalActiveMount" class="goal-active-mount"></div>
+            <div class="app-card" style="margin-top: 1rem">
+              <h3 class="goal-subtitle">Идея сэкономить</h3>
+              <p class="muted" style="margin: 0 0 0.5rem; font-size: 0.85rem">
+                Напиши идею — мама подтвердит в своём кабинете. За подтверждённую идею — ачивка.
+              </p>
+              <textarea id="ideaText" class="goal-textarea" rows="2" maxlength="500" placeholder="Например: вместо сока в школу брать воду из дома"></textarea>
+              <button type="button" class="btn btn-ghost" id="btnIdeaSend" style="margin-top: 0.5rem">Отправить маме</button>
+              <p id="ideaMsg" class="alert hidden" role="status"></p>
+            </div>
+            <h3 class="section-title" style="margin-top: 1.25rem">Награды за действия</h3>
+            <div class="app-card">
+              <ul class="achievement-list" id="goalAchievementsList"></ul>
+            </div>
+          </section>
+
+          <section class="view" data-view="goal-contribute">
+            <div class="child-view-head">
+              <button type="button" class="btn btn-ghost btn-sm child-view-back" id="btnGoalContribBack">
+                ← Назад
+              </button>
+            </div>
+            <h2 class="section-title" id="goalContribSectionHeading">Пополнить цель</h2>
+            <div class="app-card">
+              <p id="goalContribScreenTitle" class="goal-contrib-screen-title"></p>
+              <label class="goal-label" for="goalContribScreenAmount">Сумма (₽)</label>
+              <div class="amount-row">
+                <input
+                  id="goalContribScreenAmount"
+                  type="number"
+                  inputmode="numeric"
+                  min="1"
+                  step="1"
+                  placeholder="100"
+                />
+              </div>
+              <p id="goalContribScreenMsg" class="alert hidden" role="status"></p>
+              <button type="button" class="btn btn-primary" id="btnGoalContribSubmit" style="margin-top: 1rem; width: 100%">
+                Внести
+              </button>
+            </div>
+          </section>
+
+          <section class="view" data-view="learn">
+            <h2 class="section-title">Обучающие ролики</h2>
+            <p class="muted" style="margin: 0 0 1rem">Демо: список уроков с тестовыми статусами.</p>
+            <div class="app-card">
+              <div id="videoList"></div>
+            </div>
+          </section>
+
+          <section class="view" data-view="play">
+            <h2 class="section-title">Мини-игры</h2>
+            <div class="app-card">
+              <div id="gamesList"></div>
+            </div>
+          </section>
+
+          <section class="view" data-view="sim">
+            <h2 class="section-title">Симуляторы с подсказками</h2>
+            <p class="muted" style="margin: 0 0 1rem">
+              Выбирай варианты — после каждого шага БанкоКот объяснит, что важно. Это не настоящие деньги.
+            </p>
+            <div id="simHub" class="sim-hub"></div>
+            <div id="simActive" class="sim-active hidden">
+              <div class="app-card sim-active__head">
+                <div class="sim-active__title-row">
+                  <span class="sim-active__emoji" id="simEmoji" aria-hidden="true">🏙️</span>
+                  <div>
+                    <strong id="simTitle">Сценарий</strong>
+                    <p class="muted" style="margin: 0.15rem 0 0; font-size: 0.85rem" id="simSubtitle"></p>
+                  </div>
+                </div>
+                <div class="sim-budget" id="simBudgetWrap">
+                  <div class="sim-budget__labels">
+                    <span>Бюджет сценария</span>
+                    <span id="simBudgetValue">500 ₽</span>
+                  </div>
+                  <div class="sim-budget__bar" aria-hidden="true">
+                    <div class="sim-budget__fill" id="simBudgetFill" style="width: 100%"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="app-card sim-scene-card">
+                <p class="sim-scene" id="simScene"></p>
+                <div id="simChoices" class="sim-choices"></div>
+                <div id="simHint" class="sim-hint hidden" role="status">
+                  <span class="sim-hint__icon" aria-hidden="true">🐱</span>
+                  <p class="sim-hint__text" id="simHintText"></p>
+                </div>
+                <button type="button" class="btn btn-primary sim-continue hidden" id="simContinue">
+                  Понятно, дальше
+                </button>
+              </div>
+              <div id="simEnd" class="app-card sim-end hidden">
+                <h3 class="sim-end__title">Итог дня</h3>
+                <p class="sim-end__balance">
+                  Осталось: <strong id="simEndBalance">0 ₽</strong>
+                </p>
+                <div class="sim-hint sim-hint--static">
+                  <span class="sim-hint__icon" aria-hidden="true">🐱</span>
+                  <p class="sim-hint__text" id="simEndCat"></p>
+                </div>
+                <div class="sim-end__actions">
+                  <button type="button" class="btn btn-primary" id="simAgain">
+                    Пройти снова
+                  </button>
+                  <button type="button" class="btn btn-ghost" id="simToHub">
+                    Другие сценарии
+                  </button>
+                </div>
+              </div>
+              <button type="button" class="btn btn-ghost sim-back" id="simExit">
+                ← Выйти в список
+              </button>
+            </div>
+          </section>
+        </main>
+
+        <nav class="tab-bar tab-bar--child" aria-label="Разделы">
+          <button type="button" data-tab="home" class="is-active">
+            <span class="tab-bar__icon" aria-hidden="true">🏠</span>
+            Главная
+          </button>
+          <button type="button" data-tab="sim">
+            <span class="tab-bar__icon" aria-hidden="true">🎭</span>
+            Квест
+          </button>
+          <button type="button" data-tab="learn">
+            <span class="tab-bar__icon" aria-hidden="true">🎬</span>
+            Уроки
+          </button>
+          <button type="button" data-tab="play">
+            <span class="tab-bar__icon" aria-hidden="true">🎮</span>
+            Игры
+          </button>
+        </nav>
+      </div>
+
+      <!-- Родитель -->
+      <div id="parentShell" class="app-shell app-shell--parent hidden">
+        <div id="parentBlockedBanner" class="card-blocked-banner hidden">
+          Карта Маши сейчас заблокирована.
+        </div>
+        <header class="app-topbar">
+          <div class="app-topbar__user">
+            <span class="app-topbar__avatar" id="parentAvatar">👩</span>
+            <div class="app-topbar__meta">
+              <strong id="parentTopName">Ольга Петровна</strong>
+              <span id="parentTopRole">Родитель</span>
+            </div>
+          </div>
+          <button type="button" class="btn btn-ghost btn-sm" id="btnLogoutParent">
+            Выйти
+          </button>
+        </header>
+
+        <main class="app-main">
+          <section class="view is-active" data-view="overview">
+            <h2 class="section-title">Обзор</h2>
+            <div class="app-card parent-digest-card">
+              <h3 class="goal-subtitle">Итог недели</h3>
+              <div id="parentDigestMount" class="parent-digest-mount muted">Загрузка…</div>
+            </div>
+            <div class="app-card" style="margin-top: 0.75rem">
+              <h3 class="goal-subtitle">Шаги к цели</h3>
+              <p class="muted" style="margin: 0 0 0.5rem; font-size: 0.85rem">
+                Ребёнок отмечает шаг — ты подтверждаешь и при необходимости зачисляешь сумму на цель.
+              </p>
+              <div id="parentStepsMount" class="parent-steps-mount muted">—</div>
+            </div>
+            <div class="app-card" style="margin-top: 0.75rem">
+              <h3 class="goal-subtitle">Идеи «сэкономить» от Маши</h3>
+              <div id="parentIdeasMount" class="parent-ideas-mount">—</div>
+            </div>
+            <div class="app-card" style="margin-top: 0.75rem">
+              <div class="parent-stat-grid" id="parentStats"></div>
+            </div>
+            <p class="muted" style="margin-top: 1rem">
+              Лимиты и блокировка — во вкладке «Настройки». Данные сохраняются на сервере (SQLite).
+            </p>
+          </section>
+
+          <section class="view" data-view="activity">
+            <h2 class="section-title">Операции Маши</h2>
+            <div class="app-card">
+              <ul class="tx-list" id="parentTxList"></ul>
+            </div>
+          </section>
+
+          <section class="view" data-view="controls">
+            <h2 class="section-title">Карта и лимиты</h2>
+            <div class="app-card">
+              <div class="toggle-row">
+                <div>
+                  <strong>Заблокировать карту</strong>
+                  <p class="muted" style="margin: 0.2rem 0 0; font-size: 0.85rem">
+                    Ребёнок не сможет оплачивать, пока вы не снимете блокировку.
+                  </p>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="toggleBlocked" />
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+              <div class="settings-field" style="margin-top: 1rem">
+                <label for="inputDaily">Дневной лимит трат (₽)</label>
+                <input id="inputDaily" type="number" inputmode="numeric" min="50" max="50000" />
+              </div>
+              <div class="settings-field">
+                <label for="inputPerTxn">Максимум за одну покупку (₽)</label>
+                <input id="inputPerTxn" type="number" inputmode="numeric" min="10" max="10000" />
+              </div>
+              <button type="button" class="btn btn-primary" id="btnSaveLimits">
+                Сохранить лимиты
+              </button>
+              <p id="limitsSaved" class="alert alert--ok hidden" role="status"></p>
+            </div>
+          </section>
+        </main>
+
+        <nav class="tab-bar" aria-label="Разделы родителя">
+          <button type="button" data-tab="overview" class="is-active">
+            <span class="tab-bar__icon" aria-hidden="true">📊</span>
+            Обзор
+          </button>
+          <button type="button" data-tab="activity">
+            <span class="tab-bar__icon" aria-hidden="true">📜</span>
+            Операции
+          </button>
+          <button type="button" data-tab="controls">
+            <span class="tab-bar__icon" aria-hidden="true">⚙️</span>
+            Настройки
+          </button>
+        </nav>
+      </div>
+    </div>
+
+    <div id="modalBackdrop" class="modal-backdrop" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <h2 id="modalTitle"></h2>
+        <div id="modalBody"></div>
+        <button type="button" class="btn btn-ghost modal-close" id="modalCloseBtn">
+          Закрыть
+        </button>
+      </div>
+    </div>
+
+    <style>
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+    </style>
+
+    <script type="module" src="/src/main.js"></script>
+    <script>
+      document.querySelectorAll("[data-jump]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var tab = btn.getAttribute("data-jump");
+          var shell = document.getElementById("childShell");
+          if (!shell || shell.classList.contains("hidden")) return;
+          if (typeof window.zernyshkoNavigateChild === "function") {
+            window.zernyshkoNavigateChild(tab);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

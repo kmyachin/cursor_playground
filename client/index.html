@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Зёрнышко — банковское приложение для детей: карта, баланс, копилка, обучение и игры. Контроль для родителей."
+    />
+    <title>Зёрнышко — детское банковское приложение</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container inner">
+        <a href="index.html" class="logo">
+          <span class="logo-mark" aria-hidden="true">🐱</span>
+          Зёрнышко
+        </a>
+        <button
+          type="button"
+          class="nav-toggle"
+          aria-label="Открыть меню"
+          aria-expanded="false"
+          id="navToggle"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <nav class="nav" id="mainNav" aria-label="Основная навигация">
+          <a href="#features">Возможности</a>
+          <a href="#parents">Для родителей</a>
+          <a href="#download">Скачать</a>
+          <a href="app.html" class="btn btn-primary" style="text-decoration: none">Открыть демо</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <div class="hero-badges">
+              <span class="badge">Для детей 6–14 лет</span>
+              <span class="badge sun">С контролем родителей</span>
+            </div>
+            <h1>
+              Первый <span>банк</span> в кармане — безопасно и по-настоящему
+            </h1>
+            <p class="hero-lead">
+              Оплата картой, баланс и история, копилка, короткие уроки о деньгах
+              и мини-игры — всё в одном ярком приложении.
+            </p>
+            <div class="hero-cta">
+              <a href="app.html" class="btn btn-primary">Открыть демо-приложение</a>
+              <a href="#features" class="btn btn-ghost">Смотреть функции</a>
+            </div>
+          </div>
+          <div class="phone-wrap" aria-hidden="true">
+            <div class="phone">
+              <div class="phone-screen">
+                <div class="phone-notch"></div>
+                <div class="phone-ui">
+                  <div class="phone-greet">Привет, Маша! 👋</div>
+                  <div class="phone-mascot">
+                    <span class="phone-mascot__icon" aria-hidden="true">🐱</span>
+                    <span>БанкоКот: спроси про деньги или уроки</span>
+                  </div>
+                  <div class="phone-card">
+                    <div class="phone-card-label">На карте</div>
+                    <div class="phone-card-balance">1 250 ₽</div>
+                  </div>
+                  <div class="phone-row">
+                    <div class="phone-pill">
+                      Оплатить
+                      <small>в магазине</small>
+                    </div>
+                    <div class="phone-pill">
+                      Копилка
+                      <small>+320 ₽</small>
+                    </div>
+                  </div>
+                  <div class="phone-row">
+                    <div class="phone-pill">
+                      История
+                      <small>7 операций</small>
+                    </div>
+                    <div class="phone-pill">
+                      Уроки
+                      <small>3 новых</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-alt" id="features">
+        <div class="container">
+          <div class="section-head">
+            <h2>Всё, что нужно юному пользователю</h2>
+            <p>
+              Простой интерфейс, понятные слова и постепенное знакомство с
+              финансовыми привычками.
+            </p>
+          </div>
+          <div class="features-grid">
+            <article class="feature-card">
+              <div class="feature-icon green" aria-hidden="true">💳</div>
+              <h3>Оплата картой</h3>
+              <p>
+                Бесконтактные покупки там, где это разрешили родители: лимиты и
+                категории под контролем.
+              </p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon sun" aria-hidden="true">💰</div>
+              <h3>Баланс всегда под рукой</h3>
+              <p>
+                Сколько осталось на карте — видно сразу. Ребёнок учится
+                ориентироваться в своих средствах.
+              </p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon sky" aria-hidden="true">📋</div>
+              <h3>История операций</h3>
+              <p>
+                Понятный список покупок и переводов: куда ушли деньги и когда
+                они пришли.
+              </p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon coral" aria-hidden="true">🐷</div>
+              <h3>Копилка</h3>
+              <p>
+                Откладывай на мечту: цели, прогресс-бар и маленькие победы по
+                дороге к большой покупке.
+              </p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon green" aria-hidden="true">🎬</div>
+              <h3>Обучающие ролики</h3>
+              <p>
+                Короткие истории про бюджет, скидки и «нужно vs хочу» — без
+                занудства, с примерами из жизни.
+              </p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon sun" aria-hidden="true">🎮</div>
+              <h3>Мини-игры</h3>
+              <p>
+                Закрепляй знания в игровой форме: квизы, симуляторы покупок и
+                награды за задания.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="parents">
+        <div class="container parents-grid">
+          <div class="parents-copy">
+            <h2>Спокойствие для родителей</h2>
+            <p>
+              Вы подключаете счёт и задаёте правила: лимиты, список магазинов,
+              уведомления о тратах и мгновенная блокировка карты при необходимости.
+            </p>
+            <p>
+              Ребёнок получает самостоятельность в безопасных рамках, а вы —
+              прозрачную картину расходов.
+            </p>
+            <ul class="parents-list">
+              <li>Лимиты на день, неделю и разовые покупки</li>
+              <li>Push-уведомления о каждой операции</li>
+              <li>Совместные цели и пополнение копилки</li>
+              <li>Доступ к обучающим материалам из одного аккаунта семьи</li>
+            </ul>
+          </div>
+          <div class="parents-visual" aria-label="Пример контроля">
+            <div class="stat-row">
+              <span>Дневной лимит</span>
+              <strong>500 ₽</strong>
+            </div>
+            <div class="stat-row">
+              <span>Осталось сегодня</span>
+              <strong>312 ₽</strong>
+            </div>
+            <div class="stat-row">
+              <span>Копилка «Велосипед»</span>
+              <strong>68%</strong>
+            </div>
+            <div class="stat-row">
+              <span>Последняя покупка</span>
+              <strong>Книжный · 189 ₽</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="download">
+        <div class="container">
+          <div class="cta-band">
+            <h2>Начните с бесплатной установки</h2>
+            <p>
+              Демо-режим доступен сразу: посмотрите интерфейс вместе с ребёнком,
+              прежде чем оформлять карту.
+            </p>
+            <a href="app.html" class="btn btn-primary" style="text-decoration: none">
+              Запустить демо в браузере
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>© 2026 Зёрнышко. Демо-лендинг.</span>
+        <div class="footer-links">
+          <a href="#">Политика конфиденциальности</a>
+          <a href="#">Условия использования</a>
+          <a href="#">Поддержка</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        var toggle = document.getElementById("navToggle");
+        var nav = document.getElementById("mainNav");
+        if (!toggle || !nav) return;
+        toggle.addEventListener("click", function () {
+          var open = nav.classList.toggle("is-open");
+          toggle.setAttribute("aria-expanded", open ? "true" : "false");
+          toggle.setAttribute("aria-label", open ? "Закрыть меню" : "Открыть меню");
+        });
+        nav.querySelectorAll("a").forEach(function (link) {
+          link.addEventListener("click", function () {
+            nav.classList.remove("is-open");
+            toggle.setAttribute("aria-expanded", "false");
+            toggle.setAttribute("aria-label", "Открыть меню");
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

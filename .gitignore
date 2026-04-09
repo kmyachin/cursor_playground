@@ -1,0 +1,8 @@
+server/zernyshko.db
+server/.venv/
+__pycache__/
+*.pyc
+.venv/
+venv/
+client/node_modules/
+client/dist/
