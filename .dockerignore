@@ -1,0 +1,15 @@
+.git
+.gitignore
+**/.DS_Store
+**/node_modules
+client/node_modules
+client/dist
+**/__pycache__
+**/*.pyc
+**/.venv
+**/venv
+server/.venv
+server/zernyshko.db
+*.md
+.agent-transcripts
+.cursor

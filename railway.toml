@@ -1,11 +1,9 @@
 # https://docs.railway.com/config-as-code
-# Сборка фронта + зависимости API; в рантайме Flask отдаёт /api и статику из client/dist.
+# Сборка через Dockerfile: Node (client) + Python (server). Кастомный Railpack buildCommand
+# не подтягивал Python в образ.
 [build]
-builder = "RAILPACK"
-# Подшелл (cd client …) иначе cwd остаётся в client/ и путь server/requirements.txt не находится.
-buildCommand = "(cd client && npm ci && npm run build) && python3 -m pip install --no-cache-dir -r server/requirements.txt"
+builder = "DOCKERFILE"
 
 [deploy]
-startCommand = "cd server && gunicorn -w 1 -b 0.0.0.0:$PORT app:app"
 healthcheckPath = "/api/health"
 healthcheckTimeout = 120
