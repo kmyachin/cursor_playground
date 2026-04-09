@@ -6,3 +6,4 @@ buildCommand = "cd client && npm ci && npm run build"
 [deploy]
 startCommand = "cd client && npm run start"
 healthcheckPath = "/"
+healthcheckTimeout = 120
