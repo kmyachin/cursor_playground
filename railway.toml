@@ -1,0 +1,8 @@
+# https://docs.railway.com/config-as-code
+[build]
+builder = "RAILPACK"
+buildCommand = "cd client && npm ci && npm run build"
+
+[deploy]
+startCommand = "cd client && npm run start"
+healthcheckPath = "/"

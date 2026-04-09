@@ -12,6 +12,10 @@ export default defineConfig({
       "/api": { target: "http://127.0.0.1:5001", changeOrigin: true },
     },
   },
+  preview: {
+    host: true,
+    port: process.env.PORT ? Number(process.env.PORT) : 4173,
+  },
   build: {
     outDir: "dist",
     emptyOutDir: true,
