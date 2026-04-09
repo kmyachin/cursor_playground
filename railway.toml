@@ -1,9 +1,10 @@
 # https://docs.railway.com/config-as-code
+# Сборка фронта + зависимости API; в рантайме Flask отдаёт /api и статику из client/dist.
 [build]
 builder = "RAILPACK"
-buildCommand = "cd client && npm ci && npm run build"
+buildCommand = "cd client && npm ci && npm run build && python3 -m pip install --no-cache-dir -r server/requirements.txt"
 
 [deploy]
-startCommand = "cd client && npm run start"
-healthcheckPath = "/"
+startCommand = "cd server && gunicorn -w 1 -b 0.0.0.0:$PORT app:app"
+healthcheckPath = "/api/health"
 healthcheckTimeout = 120

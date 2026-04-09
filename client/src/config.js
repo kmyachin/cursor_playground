@@ -4,7 +4,13 @@ export function getApiBase() {
     return window.ZERNYSHKO_API_BASE;
   if (typeof location === "undefined") return "http://127.0.0.1:5001";
   if (location.protocol === "file:") return "http://127.0.0.1:5001";
-  if (location.port === "5000" || location.port === "5001") return "";
+  const h = location.hostname;
+  const p = location.port;
+  const local = h === "localhost" || h === "127.0.0.1";
+  if (local && (p === "5000" || p === "5001")) return "";
+  if (local && p && p !== "5000" && p !== "5001")
+    return "http://127.0.0.1:5001";
+  if (!local) return "";
   return "http://127.0.0.1:5001";
 }
 

@@ -3,7 +3,8 @@ from __future__ import annotations
 import os
 import sqlite3
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "zernyshko.db")
+_default_db = os.path.join(os.path.dirname(__file__), "zernyshko.db")
+DB_PATH = os.environ.get("DATABASE_PATH", _default_db)
 
 
 def get_db() -> sqlite3.Connection:
